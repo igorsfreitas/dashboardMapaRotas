@@ -66,6 +66,6 @@
 
 #tabelaAlunos, #tabelaColegios{border: 1px solid #e6e6e6;}
 thead{text-align: center;}
-.gridVV{    height: 200px;    overflow: scroll;}
+.gridVV{    height: 400px;    overflow: scroll;}
 
 thead{text-align: center;}
