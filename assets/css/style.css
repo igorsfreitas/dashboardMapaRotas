@@ -60,4 +60,12 @@
     text-align: center;
 }
 
-#tabelaColetas tr td{cursor: pointer;}
+#tabelaColetas tr td, #tabelaColetasColegios tr td{cursor: pointer; }
+
+#tabelaColetas, #tabelaColetasColegios{background: white;}
+
+#tabelaAlunos, #tabelaColegios{border: 1px solid #e6e6e6;}
+thead{text-align: center;}
+.gridVV{    height: 200px;    overflow: scroll;}
+
+thead{text-align: center;}

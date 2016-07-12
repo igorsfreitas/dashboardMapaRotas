@@ -19,7 +19,6 @@
 
     <!--  Light Bootstrap Table core CSS    -->
     <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
 
 
     <!--  CSS for Demo Purpose, don't include it in your project     -->
@@ -250,18 +249,51 @@
                     </div>
 
                     <!-- <button class="btn btn-default btn-block" onclick="filtrando(7);">Filtrar Aluno</button> -->
-                    <table id="tabelaColetas" class="table table-striped table-hover">
-                        <thead>
-                            <th data-field="hour">Id</th>
-                            <th data-field="name" data-sortable="true">Aluno</th>
-                            <th data-field="colegio" data-sortable="true">Colégio</th>
-                            <th data-field="date" data-sortable="true">Data</th>
-                            <th data-field="hour">Hora</th>
-                        </thead>
-                        <tbody id="tabelaAlunos">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="search" class="light-table-filter form-control" data-table="order-table" placeholder="Pesquisar...">
+                        </div>
+                    </div>
 
-                        </tbody>
-                    </table>
+                    <div class="row">
+
+                        <div class="col-md-6 gridVV">
+                            <h4 class="text-center">Alunos</h4>
+                            <table id="tabelaColetas" class="table table-striped table-hover order-table">
+                                <thead>
+                                    <tr>
+                                        <th data-field="hour">Id</th>
+                                        <th data-field="name" data-sortable="true">Aluno</th>
+                                        <th data-field="date" data-sortable="true">Data</th>
+                                        <th data-field="hour">Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaAlunos">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6 gridVV">
+                            <h4 class="text-center">Colégios</h4>
+                            <!-- <input type="search" class="light-table-filter form-control" data-table="order-table2" placeholder="Pesquisar..."> -->
+                            <table id="tabelaColetasColegios" class="table table-striped table-hover order-table">
+                                <thead>
+                                    <tr>
+                                        <th data-field="hour">Id</th>
+                                        <th data-field="colegio" data-sortable="true">Colégio</th>
+                                        <th data-field="date" data-sortable="true">Data</th>
+                                        <th data-field="hour">Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaColegios">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -600,11 +632,18 @@
         // add a line to the side_bar html
 
         //side_bar_html += '<a href="javascript:myclick(' + (gmarkers.length-1) + ')">' + label + '<\/a><br>';
-        if(id!=undefined){
+        if(id!=undefined && colegio==""){
             $("#tabelaAlunos").append(
                                 "<tr onclick='myclick(" + (gmarkers.length-1) + ")'>"+
                                         "<td>"+id+"</td>"+
                                         "<td>"+label+"</td>"+
+                                        "<td>"+data+"</td>"+
+                                        "<td>"+hora+"</td>"+
+                                "</tr>");
+        }else if(id!=undefined && colegio!=""){
+            $("#tabelaColegios").append(
+                                "<tr onclick='myclick(" + (gmarkers.length-1) + ")'>"+
+                                        "<td>"+id+"</td>"+
                                         "<td>"+colegio+"</td>"+
                                         "<td>"+data+"</td>"+
                                         "<td>"+hora+"</td>"+
@@ -634,9 +673,46 @@
 
 <!-- TABELA -->
         <script type="text/javascript">
-        $(document).ready(function(){
-            $('#tabelaColetas').dataTable();
-        });
+
+        (function(document) {
+            'use strict';
+
+            var LightTableFilter = (function(Arr) {
+
+                var _input;
+
+                function _onInputEvent(e) {
+                    _input = e.target;
+                    var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+                    Arr.forEach.call(tables, function(table) {
+                        Arr.forEach.call(table.tBodies, function(tbody) {
+                            Arr.forEach.call(tbody.rows, _filter);
+                        });
+                    });
+                }
+
+                function _filter(row) {
+                    var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+                    row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+                }
+
+                return {
+                    init: function() {
+                        var inputs = document.getElementsByClassName('light-table-filter');
+                        Arr.forEach.call(inputs, function(input) {
+                            input.oninput = _onInputEvent;
+                        });
+                    }
+                };
+            })(Array.prototype);
+
+            document.addEventListener('readystatechange', function() {
+                if (document.readyState === 'complete') {
+                    LightTableFilter.init();
+                }
+            });
+
+        })(document);
     </script>
 
 </html>
